@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpiaoju.intelligent.dao.PlatformRuleMapper">
+
+
+    <select id="list" resultType="com.cpiaoju.intelligent.model.PlatformRule">
+        SELECT r.*,f.platform_name
+        FROM sys_platform_rule r
+        left join sys_platform f on f.id = r.platform_id
+        <where>
+            <if test="platformId != null and platformId != ''"> and r.platform_id = #{platformId}</if>
+            <if test="ruleNo != null and ruleNo != ''"> and r.rule_no = #{ruleNo}</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by create_time desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        SELECT count(*) FROM sys_platform_rule r
+        <where>
+            <if test="platformId != null and platformId != ''"> and r.platform_id = #{platformId}</if>
+            <if test="ruleNo != null and ruleNo != ''"> and r.rule_no = #{ruleNo}</if>
+        </where>
+    </select>
+
+</mapper>

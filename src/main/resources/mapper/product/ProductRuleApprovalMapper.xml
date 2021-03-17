@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpiaoju.product.dao.ProductRuleApprovalMapper">
+
+    <select id="list" resultType="com.cpiaoju.product.model.ProductRuleApproval">
+        select t.*,r.rule_no,u.username from sys_product_rule_approval t
+        left join sys_platform_rule r on r.id = t.rule_id
+        left join sys_user u on u.user_id = t.create_user
+        <where>
+            <if test="ruleId != null and ruleId != ''"> and t.rule_id = #{ruleId}</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by create_time desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="count" resultType="int">
+        select count(*) from sys_product_rule_approval t
+        <where>
+            <if test="ruleId != null and ruleId != ''"> and t.rule_id = #{ruleId}</if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpiaoju.warn.dao.CompanyWarningLogMapper">
+
+    <select id="list" resultType="com.cpiaoju.warn.model.CompanyWarningLog">
+      select l.*,c.company_name,d.value companyTypeName,c.status isBlack from sys_company_warning_log l
+      left join sys_company c on c.id = l.company_id
+      left join sys_dict d on d.id = c.company_type
+      <where>
+        <if test="warningName !=null and warningName !=''">
+            and l.warning_name = #{warningName}
+        </if>
+      </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by l.create_time desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from sys_company_warning_log l
+        <where>
+            <if test="warningName !=null and warningName !=''">
+                and l.warning_name = #{warningName}
+            </if>
+        </where>
+    </select>
+
+
+
+</mapper>

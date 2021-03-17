@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpiaoju.order.dao.OrderContractMapper">
+
+    <select id="list" resultType="com.cpiaoju.order.model.OrderContract">
+        select * from sys_order_contract
+        <where>
+            <if test="oid !=null and oid !='' "> and oid = #{oid}</if>
+        </where>
+    </select>
+
+</mapper>

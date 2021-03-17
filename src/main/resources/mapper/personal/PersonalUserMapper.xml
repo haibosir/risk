@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpiaoju.personal.dao.PersonalUserMapper">
+
+    <select id="listFull" resultType="com.cpiaoju.personal.model.PersonalUser">
+        SELECT p.*,d.value sourceName,c.company_name
+        FROM sys_personal_user p
+        left join sys_dict d on d.id = p.source
+        left join sys_company c on c.id = p.company_id
+        <where>
+            <if test="page.pageData.status!=null">
+                and c.status = #{page.pageData.status}
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpiaoju.warn.dao.FeedbackMapper">
+    
+    <select id="list" resultType="com.cpiaoju.warn.model.Feedback">
+      select * from sys_feedback
+      <where>
+          <if test="relationId !=null and relationId !='' ">
+              and relation_id=#{relationId}
+          </if>
+          <if test="relationId !=null and relationId !='' ">
+              and type=#{type}
+          </if>
+      </where>
+    </select>
+
+</mapper>

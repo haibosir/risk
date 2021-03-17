@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpiaoju.intelligent.dao.ChannelTargetMapper">
+
+    <select id="list" resultType="com.cpiaoju.intelligent.model.ChannelTarget">
+        SELECT t.*,a.channel_name,d.value parentTargetName,c.value dictTargetName,e.value targetAttributeName
+        FROM sys_channel_target t
+        left join sys_channel a on a.id = t.channel_id
+        left join sys_dict d on d.id = t.parent_target_id
+        left join sys_dict c on c.id = t.target_id
+        left join sys_dict e on e.id = t.target_attribute
+        <where>
+            <if test="targetName != null and targetName != ''"> and t.target_name like CONCAT('%',#{targetName},'%')</if>
+            <if test="channelId != null and channelId != ''"> and t.channel_id = #{channelId}</if>
+            <if test="parentTargetId != null and parentTargetId != ''"> and t.parent_target_id = #{parentTargetId}</if>
+            <if test="targetId != null and targetId != ''"> and t.target_id = #{targetId}</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by t.create_time desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        SELECT count(*) FROM sys_channel_target t
+        <where>
+            <if test="targetName != null and targetName != ''"> and t.target_name like CONCAT('%',#{targetName},'%')</if>
+            <if test="channelId != null and channelId != ''"> and t.channel_id = #{channelId}</if>
+            <if test="parentTargetId != null and parentTargetId != ''"> and t.parent_target_id = #{parentTargetId}</if>
+            <if test="targetId != null and targetId != ''"> and t.target_id = #{targetId}</if>
+        </where>
+    </select>
+
+    <select id="get" resultType="com.cpiaoju.intelligent.model.ChannelTarget">
+        SELECT t.*,a.channel_name,d.value parentTargetName,c.value dictTargetName,f.value targetAttributeName
+        FROM sys_channel_target t
+        left join sys_channel a on a.id = t.channel_id
+        left join sys_dict d on d.id = t.parent_target_id
+        left join sys_dict c on c.id = t.target_id
+        left join sys_dict f on f.id = t.target_attribute
+        where t.id = #{id}
+    </select>
+
+    <select id="queryRuleDetailTargetList" resultType="com.cpiaoju.intelligent.model.ChannelTarget">
+        SELECT t.*,d.type,e.value targetAttributeName,d.operator,
+        d.content,d.id ruleDetailId,f.value parentTargetName,
+        g.value dictTargetName
+        FROM sys_platform_rule_detail d
+        left join sys_platform_rule r on d.rule_id = r.id
+        left join sys_channel_target t on t.id = d.channel_target_id
+        left join sys_dict e on e.id = t.target_attribute
+          left join sys_dict f on f.id = t.parent_target_id
+        left join sys_dict g on g.id = t.target_id
+        where r.id = #{id}
+    </select>
+
+    <select id="queryProductRuleDetailTargetList" resultType="com.cpiaoju.intelligent.model.ChannelTarget">
+        SELECT t.*,d.type,e.value targetAttributeName,d.operator,
+        d.content,d.id ruleDetailId,f.value parentTargetName,
+        g.value dictTargetName
+        FROM sys_product_rule_detail d
+        left join sys_product_rule r on d.rule_id = r.id
+        left join sys_channel_target t on t.id = d.channel_target_id
+        left join sys_dict e on e.id = t.target_attribute
+          left join sys_dict f on f.id = t.parent_target_id
+        left join sys_dict g on g.id = t.target_id
+        where r.id = #{id}
+    </select>
+</mapper>

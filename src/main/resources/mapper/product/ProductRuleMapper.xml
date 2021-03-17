@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpiaoju.product.dao.ProductRuleMapper">
+
+    <select id="list" resultType="com.cpiaoju.product.model.ProductRule">
+        SELECT r.*
+        FROM sys_product_rule r
+        left join sys_product f on f.id = r.product_id
+        <where>
+            <if test="productId != null and productId != ''"> and r.product_id = #{productId}</if>
+            <if test="status != null and status != ''"> and r.status = #{status}</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by r.create_time desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        SELECT count(*) FROM sys_product_rule r
+        <where>
+            <if test="productId != null and productId != ''"> and r.product_id = #{productId}</if>
+            <if test="status != null and status != ''"> and r.status = #{status}</if>
+        </where>
+    </select>
+</mapper>

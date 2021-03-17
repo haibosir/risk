@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpiaoju.warn.dao.CompanyInspectionMapper">
+
+    <select id="list" resultType="com.cpiaoju.warn.model.CompanyInspection">
+        select *,c.company_name,d.value space_name,t.value level_name,y.value company_type_name from sys_company_inspection i
+        left join sys_company c on c.id = i.company_id
+        left join sys_dict d on d.id = i.dict_space_id
+        left join sys_dict t on t.id = i.level
+        left join sys_dict y on y.id = c.company_type
+        <where>
+            <if test="companyName !=null and companyName !=''">
+                and c.company_name = #{companyName}
+            </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by i.create_time desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from sys_company_inspection i
+        left join sys_company c on c.id = i.company_id
+        <where>
+            <if test="companyName !=null and companyName !=''">
+                and c.company_name = #{companyName}
+            </if>
+        </where>
+    </select>
+
+</mapper>

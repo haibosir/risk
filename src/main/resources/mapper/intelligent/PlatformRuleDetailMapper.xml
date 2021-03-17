@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpiaoju.intelligent.dao.PlatformRuleDetailMapper">
+
+    <select id="listFull" resultType="com.cpiaoju.intelligent.model.PlatformRuleDetail">
+        SELECT r.*,t.userd_count
+        FROM sys_platform_rule_detail r
+        left join sys_channel_target t on t.id = r.channel_target_id
+        WHERE r.rule_id IN
+        <foreach collection="ids" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </select>
+    <delete id="batchRemove">
+        delete from sys_platform_rule_detail where rule_id = #{id}
+    </delete>
+
+</mapper>

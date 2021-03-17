@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpiaoju.intelligent.dao.ChannelMapper">
+
+    <select id="list" resultType="com.cpiaoju.intelligent.model.Channel">
+        SELECT * from sys_channel
+        <where>
+            <if test="channelName != null and channelName != ''"> and channel_name like CONCAT('%',#{channelName},'%')</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by create_time desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+
+    </select>
+    <select id="count" resultType="int">
+        select count(*) from sys_channel
+        <where>
+            <if test="channelName != null and channelName != ''"> and channel_name like CONCAT('%',#{channelName},'%')</if>
+        </where>
+    </select>
+
+</mapper>

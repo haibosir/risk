@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpiaoju.product.dao.ProductMapper">
+
+    <select id="listFull" resultType="com.cpiaoju.product.model.Product">
+        SELECT p.*,d.value sourceName
+        FROM sys_product p
+        left join sys_dict d on d.id = p.source
+        <where>
+            <if test="page.pageData.status!=null">
+                and p.status = #{page.pageData.status}
+            </if>
+            <if test="page.pageData.source!=null">
+                and p.source = #{page.pageData.source}
+            </if>
+        </where>
+    </select>
+
+    <select id="list" resultType="com.cpiaoju.product.model.Product">
+        SELECT p.*,d.platform_name sourceName
+        FROM sys_product p
+        left join sys_platform d on d.id = p.source
+        <where>
+            <if test="source !=null and source !=''"> and p.source =#{source} </if>
+            <if test="status !=null and status !=''"> and p.status =#{status} </if>
+            <if test="productName !=null and productName !=''"> and p.product_name  like '%${productName}%' </if>
+            <if test="approvalStatus !=null and approvalStatus !=''"> and p.approval_status =#{approvalStatus} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by p.create_time desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        SELECT count(*) FROM sys_product p
+        <where>
+            <if test="source !=null and source !=''"> and p.source =#{source} </if>
+            <if test="status !=null and status !=''"> and p.status =#{status} </if>
+            <if test="productName !=null and productName !=''"> and p.product_name  like '%${productName}%' </if>
+            <if test="approvalStatus !=null and approvalStatus !=''"> and p.approval_status =#{approvalStatus} </if>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpiaoju.warn.dao.AcceptWarningLogMapper">
+
+    <select id="list" resultType="com.cpiaoju.warn.model.AcceptWarningLog">
+      select l.*,p.platform_name,o.order_no from sys_accept_warning_log l
+      left join sys_platform p on p.id = l.source
+      left join sys_order o on o.id = l.order_id
+        <where>
+            <if test="warnName !=null and warnName !=''">
+                and l.warn_name = #{warnName}
+            </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by l.create_time desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from sys_accept_warning_log
+        <where>
+            <if test="warnName !=null and warnName !=''">
+                and l.warn_name = #{warnName}
+            </if>
+        </where>
+    </select>
+
+</mapper>

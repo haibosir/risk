@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cpiaoju.order.dao.OrderDetailDao">
+
+	<select id="get" resultType="com.cpiaoju.order.model.OrderDetailDO">
+		select `id`,`draft_no`,`finance_amount`,`start_date`,`end_date`,`sell_name`,`sell_account`,`sell_bank_name`,`sell_guarantor_name`,`guarantor_date`,`sell_guarantor_address`,`drawer_name`,`drawer_account`,`drawer_bank_name`,`acceptor_name`,`acceptor_account`,`acceptor_bank_name`,`acceptor_bank_no`,`acceptor_guarantor_name`,`acceptor_guarantor_date`,`acceptor_guarantor_address`,`is_transfer`,`transfer_count`,`order_id` from sys_order_detail where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.cpiaoju.order.model.OrderDetailDO">
+		select `id`,`draft_no`,`finance_amount`,`start_date`,`end_date`,`sell_name`,`sell_account`,`sell_bank_name`,`sell_guarantor_name`,`guarantor_date`,`sell_guarantor_address`,`drawer_name`,`drawer_account`,`drawer_bank_name`,`acceptor_name`,`acceptor_account`,`acceptor_bank_name`,`acceptor_bank_no`,`acceptor_guarantor_name`,`acceptor_guarantor_date`,`acceptor_guarantor_address`,`is_transfer`,`transfer_count`,`order_id` from sys_order_detail
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="draftNo != null and draftNo != ''"> and draft_no = #{draftNo} </if>
+		  		  <if test="financeAmount != null and financeAmount != ''"> and finance_amount = #{financeAmount} </if>
+		  		  <if test="startDate != null and startDate != ''"> and start_date = #{startDate} </if>
+		  		  <if test="endDate != null and endDate != ''"> and end_date = #{endDate} </if>
+		  		  <if test="sellName != null and sellName != ''"> and sell_name = #{sellName} </if>
+		  		  <if test="sellAccount != null and sellAccount != ''"> and sell_account = #{sellAccount} </if>
+		  		  <if test="sellBankName != null and sellBankName != ''"> and sell_bank_name = #{sellBankName} </if>
+		  		  <if test="sellGuarantorName != null and sellGuarantorName != ''"> and sell_guarantor_name = #{sellGuarantorName} </if>
+		  		  <if test="guarantorDate != null and guarantorDate != ''"> and guarantor_date = #{guarantorDate} </if>
+		  		  <if test="sellGuarantorAddress != null and sellGuarantorAddress != ''"> and sell_guarantor_address = #{sellGuarantorAddress} </if>
+		  		  <if test="drawerName != null and drawerName != ''"> and drawer_name = #{drawerName} </if>
+		  		  <if test="drawerAccount != null and drawerAccount != ''"> and drawer_account = #{drawerAccount} </if>
+		  		  <if test="drawerBankName != null and drawerBankName != ''"> and drawer_bank_name = #{drawerBankName} </if>
+		  		  <if test="acceptorName != null and acceptorName != ''"> and acceptor_name = #{acceptorName} </if>
+		  		  <if test="acceptorAccount != null and acceptorAccount != ''"> and acceptor_account = #{acceptorAccount} </if>
+		  		  <if test="acceptorBankName != null and acceptorBankName != ''"> and acceptor_bank_name = #{acceptorBankName} </if>
+		  		  <if test="acceptorBankNo != null and acceptorBankNo != ''"> and acceptor_bank_no = #{acceptorBankNo} </if>
+		  		  <if test="acceptorGuarantorName != null and acceptorGuarantorName != ''"> and acceptor_guarantor_name = #{acceptorGuarantorName} </if>
+		  		  <if test="acceptorGuarantorDate != null and acceptorGuarantorDate != ''"> and acceptor_guarantor_date = #{acceptorGuarantorDate} </if>
+		  		  <if test="acceptorGuarantorAddress != null and acceptorGuarantorAddress != ''"> and acceptor_guarantor_address = #{acceptorGuarantorAddress} </if>
+		  		  <if test="isTransfer != null and isTransfer != ''"> and is_transfer = #{isTransfer} </if>
+		  		  <if test="transferCount != null and transferCount != ''"> and transfer_count = #{transferCount} </if>
+		  		  <if test="orderId != null and orderId != ''"> and order_id = #{orderId} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from sys_order_detail
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="draftNo != null and draftNo != ''"> and draft_no = #{draftNo} </if>
+		  		  <if test="financeAmount != null and financeAmount != ''"> and finance_amount = #{financeAmount} </if>
+		  		  <if test="startDate != null and startDate != ''"> and start_date = #{startDate} </if>
+		  		  <if test="endDate != null and endDate != ''"> and end_date = #{endDate} </if>
+		  		  <if test="sellName != null and sellName != ''"> and sell_name = #{sellName} </if>
+		  		  <if test="sellAccount != null and sellAccount != ''"> and sell_account = #{sellAccount} </if>
+		  		  <if test="sellBankName != null and sellBankName != ''"> and sell_bank_name = #{sellBankName} </if>
+		  		  <if test="sellGuarantorName != null and sellGuarantorName != ''"> and sell_guarantor_name = #{sellGuarantorName} </if>
+		  		  <if test="guarantorDate != null and guarantorDate != ''"> and guarantor_date = #{guarantorDate} </if>
+		  		  <if test="sellGuarantorAddress != null and sellGuarantorAddress != ''"> and sell_guarantor_address = #{sellGuarantorAddress} </if>
+		  		  <if test="drawerName != null and drawerName != ''"> and drawer_name = #{drawerName} </if>
+		  		  <if test="drawerAccount != null and drawerAccount != ''"> and drawer_account = #{drawerAccount} </if>
+		  		  <if test="drawerBankName != null and drawerBankName != ''"> and drawer_bank_name = #{drawerBankName} </if>
+		  		  <if test="acceptorName != null and acceptorName != ''"> and acceptor_name = #{acceptorName} </if>
+		  		  <if test="acceptorAccount != null and acceptorAccount != ''"> and acceptor_account = #{acceptorAccount} </if>
+		  		  <if test="acceptorBankName != null and acceptorBankName != ''"> and acceptor_bank_name = #{acceptorBankName} </if>
+		  		  <if test="acceptorBankNo != null and acceptorBankNo != ''"> and acceptor_bank_no = #{acceptorBankNo} </if>
+		  		  <if test="acceptorGuarantorName != null and acceptorGuarantorName != ''"> and acceptor_guarantor_name = #{acceptorGuarantorName} </if>
+		  		  <if test="acceptorGuarantorDate != null and acceptorGuarantorDate != ''"> and acceptor_guarantor_date = #{acceptorGuarantorDate} </if>
+		  		  <if test="acceptorGuarantorAddress != null and acceptorGuarantorAddress != ''"> and acceptor_guarantor_address = #{acceptorGuarantorAddress} </if>
+		  		  <if test="isTransfer != null and isTransfer != ''"> and is_transfer = #{isTransfer} </if>
+		  		  <if test="transferCount != null and transferCount != ''"> and transfer_count = #{transferCount} </if>
+		  		  <if test="orderId != null and orderId != ''"> and order_id = #{orderId} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.cpiaoju.order.model.OrderDetailDO">
+		insert into sys_order_detail
+		(
+			`id`, 
+			`draft_no`, 
+			`finance_amount`, 
+			`start_date`, 
+			`end_date`, 
+			`sell_name`, 
+			`sell_account`, 
+			`sell_bank_name`, 
+			`sell_guarantor_name`, 
+			`guarantor_date`, 
+			`sell_guarantor_address`, 
+			`drawer_name`, 
+			`drawer_account`, 
+			`drawer_bank_name`, 
+			`acceptor_name`, 
+			`acceptor_account`, 
+			`acceptor_bank_name`, 
+			`acceptor_bank_no`, 
+			`acceptor_guarantor_name`, 
+			`acceptor_guarantor_date`, 
+			`acceptor_guarantor_address`, 
+			`is_transfer`, 
+			`transfer_count`, 
+			`order_id`
+		)
+		values
+		(
+			#{id}, 
+			#{draftNo}, 
+			#{financeAmount}, 
+			#{startDate}, 
+			#{endDate}, 
+			#{sellName}, 
+			#{sellAccount}, 
+			#{sellBankName}, 
+			#{sellGuarantorName}, 
+			#{guarantorDate}, 
+			#{sellGuarantorAddress}, 
+			#{drawerName}, 
+			#{drawerAccount}, 
+			#{drawerBankName}, 
+			#{acceptorName}, 
+			#{acceptorAccount}, 
+			#{acceptorBankName}, 
+			#{acceptorBankNo}, 
+			#{acceptorGuarantorName}, 
+			#{acceptorGuarantorDate}, 
+			#{acceptorGuarantorAddress}, 
+			#{isTransfer}, 
+			#{transferCount}, 
+			#{orderId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.cpiaoju.order.model.OrderDetailDO">
+		update sys_order_detail 
+		<set>
+			<if test="draftNo != null">`draft_no` = #{draftNo}, </if>
+			<if test="financeAmount != null">`finance_amount` = #{financeAmount}, </if>
+			<if test="startDate != null">`start_date` = #{startDate}, </if>
+			<if test="endDate != null">`end_date` = #{endDate}, </if>
+			<if test="sellName != null">`sell_name` = #{sellName}, </if>
+			<if test="sellAccount != null">`sell_account` = #{sellAccount}, </if>
+			<if test="sellBankName != null">`sell_bank_name` = #{sellBankName}, </if>
+			<if test="sellGuarantorName != null">`sell_guarantor_name` = #{sellGuarantorName}, </if>
+			<if test="guarantorDate != null">`guarantor_date` = #{guarantorDate}, </if>
+			<if test="sellGuarantorAddress != null">`sell_guarantor_address` = #{sellGuarantorAddress}, </if>
+			<if test="drawerName != null">`drawer_name` = #{drawerName}, </if>
+			<if test="drawerAccount != null">`drawer_account` = #{drawerAccount}, </if>
+			<if test="drawerBankName != null">`drawer_bank_name` = #{drawerBankName}, </if>
+			<if test="acceptorName != null">`acceptor_name` = #{acceptorName}, </if>
+			<if test="acceptorAccount != null">`acceptor_account` = #{acceptorAccount}, </if>
+			<if test="acceptorBankName != null">`acceptor_bank_name` = #{acceptorBankName}, </if>
+			<if test="acceptorBankNo != null">`acceptor_bank_no` = #{acceptorBankNo}, </if>
+			<if test="acceptorGuarantorName != null">`acceptor_guarantor_name` = #{acceptorGuarantorName}, </if>
+			<if test="acceptorGuarantorDate != null">`acceptor_guarantor_date` = #{acceptorGuarantorDate}, </if>
+			<if test="acceptorGuarantorAddress != null">`acceptor_guarantor_address` = #{acceptorGuarantorAddress}, </if>
+			<if test="isTransfer != null">`is_transfer` = #{isTransfer}, </if>
+			<if test="transferCount != null">`transfer_count` = #{transferCount}, </if>
+			<if test="orderId != null">`order_id` = #{orderId}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from sys_order_detail where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from sys_order_detail where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

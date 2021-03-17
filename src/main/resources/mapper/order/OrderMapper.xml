@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cpiaoju.order.dao.OrderDao">
+
+	<select id="get" resultType="com.cpiaoju.order.model.OrderDO">
+		select * from sys_order where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.cpiaoju.order.model.OrderDO">
+		select o.*,p.product_name,m.platform_name,d.company_type_name  from sys_order o
+		left join sys_product p on p.id = o.product_id
+		left join sys_platform m on m.id = p.source
+		left join sys_company c on c.id = o.company_id
+		left join sys_dict d.id = c.company_type
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="draftNo != null and draftNo != ''"> and draft_no = #{draftNo} </if>
+		  		  <if test="orderNo != null and orderNo != ''"> and order_no = #{orderNo} </if>
+		  		  <if test="productId != null and productId != ''"> and product_id = #{productId} </if>
+		  		  <if test="status != null and status != ''"> and status = #{status} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from sys_order
+		 <where>
+			 <if test="id != null and id != ''"> and id = #{id} </if>
+			 <if test="draftNo != null and draftNo != ''"> and draft_no = #{draftNo} </if>
+			 <if test="orderNo != null and orderNo != ''"> and order_no = #{orderNo} </if>
+			 <if test="productId != null and productId != ''"> and product_id = #{productId} </if>
+			 <if test="status != null and status != ''"> and status = #{status} </if>
+		 </where>
+	</select>
+	 
+	<insert id="save" parameterType="com.cpiaoju.order.model.OrderDO" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_order
+		(
+			`draft_no`, 
+			`order_no`, 
+			`product_id`, 
+			`company_name`, 
+			`status`, 
+			`create_time`, 
+			`finance_amount`, 
+			`financing_inter`, 
+			`pay_amount`, 
+			`acceptor`, 
+			`buy_name`, 
+			`start_time`, 
+			`end_time`, 
+			`is_transfer`, 
+			`transfer_count`, 
+			`financing_cost`, 
+			`servicefee`, 
+			`bank_id`, 
+			`discount_id`, 
+			`update_time`, 
+			`draft_img`, 
+			`draft_back_img`, 
+			`payment_voucher`
+		)
+		values
+		(
+			#{draftNo}, 
+			#{orderNo}, 
+			#{productId}, 
+			#{companyName}, 
+			#{status}, 
+			#{createTime}, 
+			#{financeAmount}, 
+			#{financingInter}, 
+			#{payAmount}, 
+			#{acceptor}, 
+			#{buyName}, 
+			#{startTime}, 
+			#{endTime}, 
+			#{isTransfer}, 
+			#{transferCount}, 
+			#{financingCost}, 
+			#{servicefee}, 
+			#{bankId}, 
+			#{discountId}, 
+			#{updateTime}, 
+			#{draftImg}, 
+			#{draftBackImg}, 
+			#{paymentVoucher}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.cpiaoju.order.model.OrderDO">
+		update sys_order 
+		<set>
+			<if test="draftNo != null">`draft_no` = #{draftNo}, </if>
+			<if test="orderNo != null">`order_no` = #{orderNo}, </if>
+			<if test="productId != null">`product_id` = #{productId}, </if>
+			<if test="companyName != null">`company_name` = #{companyName}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="financeAmount != null">`finance_amount` = #{financeAmount}, </if>
+			<if test="financingInter != null">`financing_inter` = #{financingInter}, </if>
+			<if test="payAmount != null">`pay_amount` = #{payAmount}, </if>
+			<if test="acceptor != null">`acceptor` = #{acceptor}, </if>
+			<if test="buyName != null">`buy_name` = #{buyName}, </if>
+			<if test="startTime != null">`start_time` = #{startTime}, </if>
+			<if test="endTime != null">`end_time` = #{endTime}, </if>
+			<if test="isTransfer != null">`is_transfer` = #{isTransfer}, </if>
+			<if test="transferCount != null">`transfer_count` = #{transferCount}, </if>
+			<if test="financingCost != null">`financing_cost` = #{financingCost}, </if>
+			<if test="servicefee != null">`servicefee` = #{servicefee}, </if>
+			<if test="bankId != null">`bank_id` = #{bankId}, </if>
+			<if test="discountId != null">`discount_id` = #{discountId}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
+			<if test="draftImg != null">`draft_img` = #{draftImg}, </if>
+			<if test="draftBackImg != null">`draft_back_img` = #{draftBackImg}, </if>
+			<if test="paymentVoucher != null">`payment_voucher` = #{paymentVoucher}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from sys_order where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from sys_order where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>
